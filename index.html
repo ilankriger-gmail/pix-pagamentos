@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PIX Pagamentos | NextlevelDJ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+      min-height: 100vh;
+      color: #fff;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+    header { text-align: center; margin-bottom: 60px; }
+    .logo { font-size: 14px; font-weight: 600; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 20px; }
+    h1 {
+      font-size: clamp(32px, 6vw, 56px); font-weight: 800;
+      background: linear-gradient(135deg, #00d4aa 0%, #7c3aed 50%, #f472b6 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 20px;
+    }
+    .subtitle { font-size: 18px; color: #888; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+    .stats-bar { display: flex; justify-content: center; gap: 40px; margin: 40px 0; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-value { font-size: 42px; font-weight: 800; color: #00d4aa; }
+    .stat-label { font-size: 14px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+    .campaigns { display: flex; flex-direction: column; gap: 40px; }
+    .campaign {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px; padding: 40px;
+    }
+    .campaign-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; flex-wrap: wrap; gap: 20px; }
+    .campaign-title { display: flex; align-items: center; gap: 15px; }
+    .campaign-icon {
+      width: 50px; height: 50px;
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;
+    }
+    .campaign-name { font-size: 24px; font-weight: 700; }
+    .campaign-date { font-size: 14px; color: #666; }
+    .campaign-total {
+      background: rgba(0, 212, 170, 0.1);
+      border: 1px solid rgba(0, 212, 170, 0.3);
+      padding: 12px 24px; border-radius: 50px; font-weight: 700; color: #00d4aa;
+    }
+    .winners-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    .winner {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px; padding: 20px;
+      display: flex; align-items: center; gap: 15px;
+      cursor: pointer; transition: all 0.2s ease;
+      text-decoration: none; color: inherit;
+    }
+    .winner:hover { background: rgba(0, 212, 170, 0.1); border-color: rgba(0, 212, 170, 0.4); transform: translateY(-2px); }
+    .winner-avatar {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, #00d4aa, #00b894);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 18px; color: #fff; flex-shrink: 0;
+    }
+    .winner-info { flex: 1; min-width: 0; }
+    .winner-name { font-weight: 600; font-size: 14px; }
+    .winner-amount { font-size: 13px; color: #00d4aa; font-weight: 600; }
+    .winner-click { font-size: 11px; color: #666; margin-top: 4px; }
+    footer { text-align: center; margin-top: 80px; padding: 40px; color: #666; }
+    footer a { color: #00d4aa; text-decoration: none; }
+    .verified-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0, 212, 170, 0.1);
+      border: 1px solid rgba(0, 212, 170, 0.2);
+      padding: 8px 16px; border-radius: 50px; font-size: 14px; color: #00d4aa; margin-top: 20px;
+    }
+    
+    /* Modal */
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
+    .modal.active { display: flex; align-items: center; justify-content: center; }
+    .modal-content { max-width: 90%; max-height: 90%; position: relative; }
+    .modal-content img { max-width: 100%; max-height: 85vh; border-radius: 12px; }
+    .modal-close {
+      position: absolute; top: -40px; right: 0; font-size: 30px; color: #fff;
+      cursor: pointer; background: none; border: none; padding: 10px;
+    }
+    
+    @media (max-width: 600px) {
+      .container { padding: 20px 15px; }
+      .campaign { padding: 25px; }
+      .stats-bar { gap: 30px; }
+      .stat-value { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">@NextlevelDJ</div>
+      <h1>PIX Pagamentos</h1>
+      <p class="subtitle">Transparência total. Todos os PIX de R$100 pagos para os melhores comentários nas nossas ações.</p>
+      
+      <div class="stats-bar">
+        <div class="stat"><div class="stat-value">20</div><div class="stat-label">Pessoas pagas</div></div>
+        <div class="stat"><div class="stat-value">R$ 2.000</div><div class="stat-label">Total distribuído</div></div>
+        <div class="stat"><div class="stat-value">4</div><div class="stat-label">Ações realizadas</div></div>
+      </div>
+      
+      <div class="verified-badge">✓ Pagamentos verificados via PIX • 19/02/2026</div>
+    </header>
+    
+    <div class="campaigns">
+      
+      <!-- Emergent Ação 1 -->
+      <div class="campaign">
+        <div class="campaign-header">
+          <div class="campaign-title">
+            <div class="campaign-icon">🚀</div>
+            <div><div class="campaign-name">Emergent</div><div class="campaign-date">Ação #1 • Fevereiro 2026</div></div>
+          </div>
+          <div class="campaign-total">R$ 500 pagos</div>
+        </div>
+        <div class="winners-grid">
+          <a class="winner" href="comprovantes/01-geovana.jpg" target="_blank">
+            <div class="winner-avatar">G</div>
+            <div class="winner-info"><div class="winner-name">Geovana C...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/02-poliana.jpg" target="_blank">
+            <div class="winner-avatar">P</div>
+            <div class="winner-info"><div class="winner-name">Poliana R...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/03-analivia.jpg" target="_blank">
+            <div class="winner-avatar">A</div>
+            <div class="winner-info"><div class="winner-name">Ana Livia M...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/04-karolyne.jpg" target="_blank">
+            <div class="winner-avatar">K</div>
+            <div class="winner-info"><div class="winner-name">Karolyne C...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/05-daniela.jpg" target="_blank">
+            <div class="winner-avatar">D</div>
+            <div class="winner-info"><div class="winner-name">Daniela C...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Emergent Ação 2 -->
+      <div class="campaign">
+        <div class="campaign-header">
+          <div class="campaign-title">
+            <div class="campaign-icon">🚀</div>
+            <div><div class="campaign-name">Emergent</div><div class="campaign-date">Ação #2 • Fevereiro 2026</div></div>
+          </div>
+          <div class="campaign-total">R$ 500 pagos</div>
+        </div>
+        <div class="winners-grid">
+          <a class="winner" href="comprovantes/06-raiany.jpg" target="_blank">
+            <div class="winner-avatar">R</div>
+            <div class="winner-info"><div class="winner-name">Raiany G...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/07-barbara.jpg" target="_blank">
+            <div class="winner-avatar">B</div>
+            <div class="winner-info"><div class="winner-name">Barbara G...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/08-suelen.jpg" target="_blank">
+            <div class="winner-avatar">S</div>
+            <div class="winner-info"><div class="winner-name">Suelen O...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/09-ashley.jpg" target="_blank">
+            <div class="winner-avatar">A</div>
+            <div class="winner-info"><div class="winner-name">Ashley N...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/10-jessica.jpg" target="_blank">
+            <div class="winner-avatar">J</div>
+            <div class="winner-info"><div class="winner-name">Jessica C...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Emergent Ação 3 -->
+      <div class="campaign">
+        <div class="campaign-header">
+          <div class="campaign-title">
+            <div class="campaign-icon">🚀</div>
+            <div><div class="campaign-name">Emergent</div><div class="campaign-date">Ação #3 • Fevereiro 2026</div></div>
+          </div>
+          <div class="campaign-total">R$ 500 pagos</div>
+        </div>
+        <div class="winners-grid">
+          <a class="winner" href="comprovantes/11-lyane.jpg" target="_blank">
+            <div class="winner-avatar">L</div>
+            <div class="winner-info"><div class="winner-name">Lyane A...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/12-susan.jpg" target="_blank">
+            <div class="winner-avatar">S</div>
+            <div class="winner-info"><div class="winner-name">Susan K...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/13-tais.jpg" target="_blank">
+            <div class="winner-avatar">T</div>
+            <div class="winner-info"><div class="winner-name">Tais S...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/14-kellen.jpg" target="_blank">
+            <div class="winner-avatar">K</div>
+            <div class="winner-info"><div class="winner-name">Kellen O...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/15-lucilla.jpg" target="_blank">
+            <div class="winner-avatar">L</div>
+            <div class="winner-info"><div class="winner-name">Lucilla M...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+        </div>
+      </div>
+      
+      <!-- PagBank -->
+      <div class="campaign">
+        <div class="campaign-header">
+          <div class="campaign-title">
+            <div class="campaign-icon">💳</div>
+            <div><div class="campaign-name">PagBank</div><div class="campaign-date">Fevereiro 2026</div></div>
+          </div>
+          <div class="campaign-total">R$ 500 pagos</div>
+        </div>
+        <div class="winners-grid">
+          <a class="winner" href="comprovantes/16-devid.jpg" target="_blank">
+            <div class="winner-avatar">D</div>
+            <div class="winner-info"><div class="winner-name">Devid S...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/17-andre.jpg" target="_blank">
+            <div class="winner-avatar">A</div>
+            <div class="winner-info"><div class="winner-name">Andre F...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/18-joao.jpg" target="_blank">
+            <div class="winner-avatar">J</div>
+            <div class="winner-info"><div class="winner-name">Joao V...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/19-veronica.jpg" target="_blank">
+            <div class="winner-avatar">V</div>
+            <div class="winner-info"><div class="winner-name">Veronica A...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+          <a class="winner" href="comprovantes/20-samanta.jpg" target="_blank">
+            <div class="winner-avatar">S</div>
+            <div class="winner-info"><div class="winner-name">Samanta Z...</div><div class="winner-amount">PIX R$ 100 ✓</div><div class="winner-click">Ver comprovante →</div></div>
+          </a>
+        </div>
+      </div>
+      
+    </div>
+    
+    <footer>
+      <p>Feito com 💚 por <a href="https://instagram.com/nextleveldj" target="_blank">@NextlevelDJ</a></p>
+      <p style="margin-top: 10px; font-size: 13px;">Todos os pagamentos são reais e verificáveis. Clique em qualquer nome para ver o comprovante.</p>
+    </footer>
+  </div>
+</body>
+</html>
