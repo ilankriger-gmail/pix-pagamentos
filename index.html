@@ -115,8 +115,66 @@
       color: var(--muted);
       line-height: 1.75;
       max-width: 460px;
-      margin: 0 auto 48px;
+      margin: 0 auto 32px;
       letter-spacing: 0;
+    }
+
+    /* ── HERO CTA ── */
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--green);
+      color: #000;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      padding: 16px 28px;
+      border-radius: 999px;
+      text-decoration: none;
+      margin-bottom: 48px;
+      box-shadow: 0 8px 24px rgba(0, 201, 122, 0.35), 0 0 0 1px rgba(0, 201, 122, 0.5) inset;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+      position: relative;
+    }
+
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      background: #00e08a;
+      box-shadow: 0 14px 32px rgba(0, 201, 122, 0.5), 0 0 0 1px rgba(0, 201, 122, 0.6) inset;
+    }
+
+    .hero-cta:active { transform: translateY(0); }
+
+    .hero-cta-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px; height: 24px;
+      background: #000;
+      color: var(--green);
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 800;
+      transition: transform 0.2s ease;
+    }
+
+    .hero-cta:hover .hero-cta-arrow { transform: translateX(3px); }
+
+    .hero-cta-pulse {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      box-shadow: 0 0 0 0 rgba(0, 201, 122, 0.6);
+      animation: ctaPulse 2.2s ease-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes ctaPulse {
+      0%   { box-shadow: 0 0 0 0 rgba(0, 201, 122, 0.5); }
+      70%  { box-shadow: 0 0 0 18px rgba(0, 201, 122, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 201, 122, 0); }
     }
 
     /* ── STATS ── */
@@ -486,27 +544,33 @@
 <body>
 
   <!-- CTA BANNER -->
-  <a href="https://tv.linkdobem.com/?id=ik119_yt" target="_blank" class="cta-banner">
-    Quer receber uma doacao? Conheca as acoes do meu Link do Bem →
+  <a href="https://linkdobem.org/?utm_campaign=teamo_MAIS&utm_source=IG_teamo_MAIS&utm_term=teamo_MAIS" target="_blank" class="cta-banner">
+    Quer receber uma doação? Conheça as ações do meu Link do Bem →
   </a>
 
   <!-- HERO -->
   <section class="hero">
     <div class="hero-tag">Pagamentos verificados</div>
     <h1>Cada PIX,<br><span>comprovado.</span></h1>
-    <p>Todos os R$100 pagos aos melhores comentários nas nossas ações. Clique em qualquer nome para ver o comprovante.</p>
+    <p>Todos os PIX pagos aos melhores comentários nas nossas ações. Clique em qualquer nome para ver o comprovante.</p>
+
+    <a href="https://linkdobem.org/?utm_campaign=teamo_MAIS&utm_source=IG_teamo_MAIS&utm_term=teamo_MAIS" target="_blank" class="hero-cta">
+      <span class="hero-cta-pulse"></span>
+      Quero receber uma doação
+      <span class="hero-cta-arrow">→</span>
+    </a>
 
     <div class="stats">
       <div class="stat">
-        <div class="stat-num">42</div>
+        <div class="stat-num">102</div>
         <div class="stat-label">Pessoas</div>
       </div>
       <div class="stat">
-        <div class="stat-num">R$4.4k</div>
+        <div class="stat-num">R$10.8k</div>
         <div class="stat-label">Distribuídos</div>
       </div>
       <div class="stat">
-        <div class="stat-num">8</div>
+        <div class="stat-num">19</div>
         <div class="stat-label">Ações</div>
       </div>
       <div class="stat">
@@ -524,18 +588,507 @@
   <!-- TAB SWITCHER -->
   <div class="tab-wrapper">
     <div class="tab-switcher">
-      <button class="tab-btn active" data-tab="marco">Março 2026</button>
-      <button class="tab-btn" data-tab="fevereiro">Fevereiro 2026</button>
+      <button class="tab-btn active" data-tab="p1">Página 1</button>
+      <button class="tab-btn" data-tab="p2">Página 2</button>
+      <button class="tab-btn" data-tab="p3">Página 3</button>
     </div>
   </div>
 
   <div class="campaigns">
 
     <!-- ════════════════════════════════════ -->
+    <!-- MAIO 2026 TAB                        -->
+    <!-- ════════════════════════════════════ -->
+    <div class="tab-content active" id="tab-p1">
+
+      <!-- PagBank — Pipoca -->
+      <div class="campaign">
+        <div class="campaign-head">
+          <div class="campaign-meta">
+            <div class="campaign-icon">🍿</div>
+            <div>
+              <div class="campaign-name">PagBank — Pipoca</div>
+              <div class="campaign-sub">Maio 2026 · 5 ganhadores</div>
+            </div>
+          </div>
+          <div class="campaign-badge">R$ 500 pagos</div>
+        </div>
+        <div class="winners">
+          <a class="winner" href="comprovantes/73-jessyca.jpg" target="_blank">
+            <div class="winner-avatar">J</div>
+            <div><div class="winner-name">Jessyca P.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/103-fernanda.jpg" target="_blank">
+            <div class="winner-avatar">F</div>
+            <div><div class="winner-name">Fernanda S.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/75-kesley.jpg" target="_blank">
+            <div class="winner-avatar">K</div>
+            <div><div class="winner-name">Kesley C.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/76-val.jpg" target="_blank">
+            <div class="winner-avatar">V</div>
+            <div><div class="winner-name">Val S.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/77-gabriela.jpg" target="_blank">
+            <div class="winner-avatar">G</div>
+            <div><div class="winner-name">Gabriela P.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Amazon — Quiz da Copa -->
+      <div class="campaign">
+        <div class="campaign-head">
+          <div class="campaign-meta">
+            <div class="campaign-icon">🏆</div>
+            <div>
+              <div class="campaign-name">Amazon — Quiz da Copa</div>
+              <div class="campaign-sub">Maio 2026 · 5 ganhadores</div>
+            </div>
+          </div>
+          <div class="campaign-badge">R$ 500 pagos</div>
+        </div>
+        <div class="winners">
+          <a class="winner" href="comprovantes/78-izabelly.jpg" target="_blank">
+            <div class="winner-avatar">I</div>
+            <div><div class="winner-name">Izabelly V.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/79-danielle.jpg" target="_blank">
+            <div class="winner-avatar">D</div>
+            <div><div class="winner-name">Danielle V.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/80-marcia.jpg" target="_blank">
+            <div class="winner-avatar">M</div>
+            <div><div class="winner-name">Márcia N.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/81-jheniffer.jpg" target="_blank">
+            <div class="winner-avatar">J</div>
+            <div><div class="winner-name">Jheniffer V.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/102-mariana.jpg" target="_blank">
+            <div class="winner-avatar">M</div>
+            <div><div class="winner-name">Mariana F.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- inDrive — Dia das Mães -->
+      <div class="campaign">
+        <div class="campaign-head">
+          <div class="campaign-meta">
+            <div class="campaign-icon">💐</div>
+            <div>
+              <div class="campaign-name">inDrive — Dia das Mães</div>
+              <div class="campaign-sub">Maio 2026 · 5 ganhadores</div>
+            </div>
+          </div>
+          <div class="campaign-badge">R$ 500 pagos</div>
+        </div>
+        <div class="winners">
+          <a class="winner" href="comprovantes/82-nayane.jpg" target="_blank">
+            <div class="winner-avatar">N</div>
+            <div><div class="winner-name">Nayane A.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/83-anapaula.jpg" target="_blank">
+            <div class="winner-avatar">A</div>
+            <div><div class="winner-name">Ana Paula C.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/84-larissa.jpg" target="_blank">
+            <div class="winner-avatar">L</div>
+            <div><div class="winner-name">Larissa A.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/85-anaflavia.jpg" target="_blank">
+            <div class="winner-avatar">A</div>
+            <div><div class="winner-name">Ana Flávia C.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/86-talita.jpg" target="_blank">
+            <div class="winner-avatar">T</div>
+            <div><div class="winner-name">Talita C.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Duetto — Moça de preto -->
+      <div class="campaign">
+        <div class="campaign-head">
+          <div class="campaign-meta">
+            <div class="campaign-icon">🧻</div>
+            <div>
+              <div class="campaign-name">Duetto — Moça de preto</div>
+              <div class="campaign-sub">Maio 2026 · 5 ganhadores</div>
+            </div>
+          </div>
+          <div class="campaign-badge">R$ 500 pagos</div>
+        </div>
+        <div class="winners">
+          <a class="winner" href="comprovantes/87-paula.jpg" target="_blank">
+            <div class="winner-avatar">P</div>
+            <div><div class="winner-name">Paula Luiza V.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/88-rafaela.jpg" target="_blank">
+            <div class="winner-avatar">R</div>
+            <div><div class="winner-name">Rafaela F.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/89-sandra.jpg" target="_blank">
+            <div class="winner-avatar">S</div>
+            <div><div class="winner-name">Sandra B.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/90-giselia.jpg" target="_blank">
+            <div class="winner-avatar">G</div>
+            <div><div class="winner-name">Giselia F.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/91-rayanara.jpg" target="_blank">
+            <div class="winner-avatar">R</div>
+            <div><div class="winner-name">Rayanara R.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Localiza — Marcas de carro -->
+      <div class="campaign">
+        <div class="campaign-head">
+          <div class="campaign-meta">
+            <div class="campaign-icon">🚗</div>
+            <div>
+              <div class="campaign-name">Localiza — Marcas de carro</div>
+              <div class="campaign-sub">Maio 2026 · 5 ganhadores</div>
+            </div>
+          </div>
+          <div class="campaign-badge">R$ 500 pagos</div>
+        </div>
+        <div class="winners">
+          <a class="winner" href="comprovantes/92-guilherme.jpg" target="_blank">
+            <div class="winner-avatar">G</div>
+            <div><div class="winner-name">Guilherme N.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/93-camila.jpg" target="_blank">
+            <div class="winner-avatar">C</div>
+            <div><div class="winner-name">Camila B.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/94-monika.jpg" target="_blank">
+            <div class="winner-avatar">M</div>
+            <div><div class="winner-name">Monika G.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/99-fabio.jpg" target="_blank">
+            <div class="winner-avatar">F</div>
+            <div><div class="winner-name">Fábio C.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/100-adry.jpg" target="_blank">
+            <div class="winner-avatar">A</div>
+            <div><div class="winner-name">Adry S.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Amazon — TV 75" -->
+      <div class="campaign">
+        <div class="campaign-head">
+          <div class="campaign-meta">
+            <div class="campaign-icon">📺</div>
+            <div>
+              <div class="campaign-name">Amazon — TV 75"</div>
+              <div class="campaign-sub">Maio 2026 · 5 ganhadores</div>
+            </div>
+          </div>
+          <div class="campaign-badge">R$ 500 pagos</div>
+        </div>
+        <div class="winners">
+          <a class="winner" href="comprovantes/95-carlos.jpg" target="_blank">
+            <div class="winner-avatar">C</div>
+            <div><div class="winner-name">Carlos E.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/96-suh.jpg" target="_blank">
+            <div class="winner-avatar">S</div>
+            <div><div class="winner-name">Suh O.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/97-marcio.jpg" target="_blank">
+            <div class="winner-avatar">M</div>
+            <div><div class="winner-name">Márcio M.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/98-sheila.jpg" target="_blank">
+            <div class="winner-avatar">S</div>
+            <div><div class="winner-name">Sheila A.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/101-bruna.jpg" target="_blank">
+            <div class="winner-avatar">B</div>
+            <div><div class="winner-name">Bruna O.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PÁGINA 2 -->
+    <div class="tab-content" id="tab-p2">
+
+      <!-- Neymar na Copa -->
+      <div class="campaign">
+        <div class="campaign-head">
+          <div class="campaign-meta">
+            <div class="campaign-icon">⚽</div>
+            <div>
+              <div class="campaign-name">Neymar na Copa</div>
+              <div class="campaign-sub">Maio 2026 · 10 ganhadores</div>
+            </div>
+          </div>
+          <div class="campaign-badge">R$ 1.000 pagos</div>
+        </div>
+        <div class="winners">
+          <a class="winner" href="comprovantes/63-hisley.jpg" target="_blank">
+            <div class="winner-avatar">H</div>
+            <div><div class="winner-name">Hisley M.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/64-hyan.jpg" target="_blank">
+            <div class="winner-avatar">H</div>
+            <div><div class="winner-name">Hyan C.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/65-suzana.jpg" target="_blank">
+            <div class="winner-avatar">S</div>
+            <div><div class="winner-name">Suzana D.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/66-pedro.jpg" target="_blank">
+            <div class="winner-avatar">P</div>
+            <div><div class="winner-name">Pedro A.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/67-amanda.jpg" target="_blank">
+            <div class="winner-avatar">A</div>
+            <div><div class="winner-name">Amanda S.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/68-telmir.jpg" target="_blank">
+            <div class="winner-avatar">T</div>
+            <div><div class="winner-name">Telmir D.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/69-tarcys.jpg" target="_blank">
+            <div class="winner-avatar">T</div>
+            <div><div class="winner-name">Tarcys R.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/70-gustavo.jpg" target="_blank">
+            <div class="winner-avatar">G</div>
+            <div><div class="winner-name">Gustavo F.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/71-vanderlei.jpg" target="_blank">
+            <div class="winner-avatar">V</div>
+            <div><div class="winner-name">Vanderlei C.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/72-wenderson.jpg" target="_blank">
+            <div class="winner-avatar">W</div>
+            <div><div class="winner-name">Wenderson M.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- FIEP / SESI -->
+      <div class="campaign">
+        <div class="campaign-head">
+          <div class="campaign-meta">
+            <div class="campaign-icon">🏭</div>
+            <div>
+              <div class="campaign-name">SESI / FIEP</div>
+              <div class="campaign-sub">Maio 2026 · 5 ganhadores</div>
+            </div>
+          </div>
+          <div class="campaign-badge">R$ 500 pagos</div>
+        </div>
+        <div class="winners">
+          <a class="winner" href="comprovantes/56-paula.jpg" target="_blank">
+            <div class="winner-avatar">P</div>
+            <div><div class="winner-name">Paula T.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/57-jessica.jpg" target="_blank">
+            <div class="winner-avatar">J</div>
+            <div><div class="winner-name">Jéssica S.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/58-tauana.jpg" target="_blank">
+            <div class="winner-avatar">T</div>
+            <div><div class="winner-name">Tauana R.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/62-larissa.jpg" target="_blank">
+            <div class="winner-avatar">L</div>
+            <div><div class="winner-name">Larissa T.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/60-natalia.jpg" target="_blank">
+            <div class="winner-avatar">N</div>
+            <div><div class="winner-name">Natalia L.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Emergent — Ideias de Apps -->
+      <div class="campaign">
+        <div class="campaign-head">
+          <div class="campaign-meta">
+            <div class="campaign-icon">🚀</div>
+            <div>
+              <div class="campaign-name">Emergent — Ideias de Apps</div>
+              <div class="campaign-sub">Maio 2026 · 6 ganhadores</div>
+            </div>
+          </div>
+          <div class="campaign-badge">R$ 1.000 pagos</div>
+        </div>
+        <div class="winners">
+          <a class="winner" href="comprovantes/42-larissa.jpg" target="_blank">
+            <div class="winner-avatar">L</div>
+            <div><div class="winner-name">Larissa C.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/43-geovana.jpg" target="_blank">
+            <div class="winner-avatar">G</div>
+            <div><div class="winner-name">Geovana R.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/54-gloria.jpg" target="_blank">
+            <div class="winner-avatar">G</div>
+            <div><div class="winner-name">Glória R.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/55-eddie.jpg" target="_blank">
+            <div class="winner-avatar">E</div>
+            <div><div class="winner-name">Eddie L.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/61-alynne.jpg" target="_blank">
+            <div class="winner-avatar">A</div>
+            <div><div class="winner-name">Alynne P.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/53-jaqueline.jpg" target="_blank">
+            <div class="winner-avatar">J</div>
+            <div><div class="winner-name">Jaqueline</div><div class="winner-amount">R$ 500 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Emergent — Criar app Pastel -->
+      <div class="campaign">
+        <div class="campaign-head">
+          <div class="campaign-meta">
+            <div class="campaign-icon">🥟</div>
+            <div>
+              <div class="campaign-name">Emergent — Criar app Pastel</div>
+              <div class="campaign-sub">Maio 2026 · 5 ganhadores · 1 pendente</div>
+            </div>
+          </div>
+          <div class="campaign-badge">R$ 400 pagos</div>
+        </div>
+        <div class="winners">
+          <a class="winner" href="comprovantes/45-nara.jpg" target="_blank">
+            <div class="winner-avatar">N</div>
+            <div><div class="winner-name">Nara M.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/52-kelly.jpg" target="_blank">
+            <div class="winner-avatar">K</div>
+            <div><div class="winner-name">Kelly O.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/51-suelen.jpg" target="_blank">
+            <div class="winner-avatar">S</div>
+            <div><div class="winner-name">Suh J.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/50-marcela.jpg" target="_blank">
+            <div class="winner-avatar">M</div>
+            <div><div class="winner-name">Marcela P.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <div class="winner pending">
+            <div class="winner-avatar">R</div>
+            <div><div class="winner-name">Rudolpho A.</div><div class="winner-amount pending">R$ 100 · pendente</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PagBank (Maio) -->
+      <div class="campaign">
+        <div class="campaign-head">
+          <div class="campaign-meta">
+            <div class="campaign-icon">💳</div>
+            <div>
+              <div class="campaign-name">PagBank</div>
+              <div class="campaign-sub">Maio 2026 · 5 ganhadores</div>
+            </div>
+          </div>
+          <div class="campaign-badge">R$ 500 pagos</div>
+        </div>
+        <div class="winners">
+          <a class="winner" href="comprovantes/49-marlio.jpg" target="_blank">
+            <div class="winner-avatar">M</div>
+            <div><div class="winner-name">Marlio G.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/48-gledson.jpg" target="_blank">
+            <div class="winner-avatar">G</div>
+            <div><div class="winner-name">Guel L.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/47-hadson.jpg" target="_blank">
+            <div class="winner-avatar">H</div>
+            <div><div class="winner-name">Hadson L.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/46-yuri.jpg" target="_blank">
+            <div class="winner-avatar">Y</div>
+            <div><div class="winner-name">Yuri F.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+          <a class="winner" href="comprovantes/59-vinicius.jpg" target="_blank">
+            <div class="winner-avatar">V</div>
+            <div><div class="winner-name">Vinicius N.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <span class="winner-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+    <!-- ════════════════════════════════════ -->
     <!-- MARÇO 2026 TAB                       -->
     <!-- ════════════════════════════════════ -->
-    <div class="tab-content active" id="tab-marco">
-
       <!-- iFood Cartão Vermelho -->
       <div class="campaign">
         <div class="campaign-head">
@@ -577,6 +1130,11 @@
         </div>
       </div>
 
+    </div>
+
+    <!-- PÁGINA 3 -->
+    <div class="tab-content" id="tab-p3">
+
       <!-- PagBank (Março) -->
       <div class="campaign">
         <div class="campaign-head">
@@ -612,7 +1170,7 @@
           </a>
           <a class="winner" href="comprovantes/29-patricia.jpg" target="_blank">
             <div class="winner-avatar">P</div>
-            <div><div class="winner-name">Patricia L.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <div><div class="winner-name">Patrícia L.</div><div class="winner-amount">R$ 100 ✓</div></div>
             <span class="winner-arrow">↗</span>
           </a>
         </div>
@@ -643,7 +1201,7 @@
           </a>
           <a class="winner" href="comprovantes/32-joao.jpg" target="_blank">
             <div class="winner-avatar">J</div>
-            <div><div class="winner-name">Joao S.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <div><div class="winner-name">João S.</div><div class="winner-amount">R$ 100 ✓</div></div>
             <span class="winner-arrow">↗</span>
           </a>
           <a class="winner" href="comprovantes/33-ju.jpg" target="_blank">
@@ -674,7 +1232,7 @@
         <div class="winners">
           <a class="winner" href="comprovantes/36-joaocarlos.jpg" target="_blank">
             <div class="winner-avatar">J</div>
-            <div><div class="winner-name">Joao Carlos G.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <div><div class="winner-name">João Carlos G.</div><div class="winner-amount">R$ 100 ✓</div></div>
             <span class="winner-arrow">↗</span>
           </a>
           <a class="winner" href="comprovantes/37-sam.jpg" target="_blank">
@@ -684,7 +1242,7 @@
           </a>
           <a class="winner" href="comprovantes/38-flavia.jpg" target="_blank">
             <div class="winner-avatar">F</div>
-            <div><div class="winner-name">Flavia B.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <div><div class="winner-name">Flávia B.</div><div class="winner-amount">R$ 100 ✓</div></div>
             <span class="winner-arrow">↗</span>
           </a>
           <a class="winner" href="comprovantes/39-sarah.jpg" target="_blank">
@@ -710,13 +1268,9 @@
         </div>
       </div>
 
-    </div>
-
     <!-- ════════════════════════════════════ -->
     <!-- FEVEREIRO 2026 TAB                   -->
     <!-- ════════════════════════════════════ -->
-    <div class="tab-content" id="tab-fevereiro">
-
       <!-- Emergent #1 -->
       <div class="campaign">
         <div class="campaign-head">
@@ -742,7 +1296,7 @@
           </a>
           <a class="winner" href="comprovantes/03-analivia.jpg" target="_blank">
             <div class="winner-avatar">A</div>
-            <div><div class="winner-name">Ana Livia M.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <div><div class="winner-name">Ana Lívia M.</div><div class="winner-amount">R$ 100 ✓</div></div>
             <span class="winner-arrow">↗</span>
           </a>
           <a class="winner" href="comprovantes/04-karolyne.jpg" target="_blank">
@@ -824,7 +1378,7 @@
           </a>
           <a class="winner" href="comprovantes/13-tais.jpg" target="_blank">
             <div class="winner-avatar">T</div>
-            <div><div class="winner-name">Tais S.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <div><div class="winner-name">Taís S.</div><div class="winner-amount">R$ 100 ✓</div></div>
             <span class="winner-arrow">↗</span>
           </a>
           <a class="winner" href="comprovantes/14-kellen.jpg" target="_blank">
@@ -865,7 +1419,7 @@
           </a>
           <a class="winner" href="comprovantes/18-joao.jpg" target="_blank">
             <div class="winner-avatar">J</div>
-            <div><div class="winner-name">Joao V.</div><div class="winner-amount">R$ 100 ✓</div></div>
+            <div><div class="winner-name">João V.</div><div class="winner-amount">R$ 100 ✓</div></div>
             <span class="winner-arrow">↗</span>
           </a>
           <a class="winner" href="comprovantes/19-veronica.jpg" target="_blank">
