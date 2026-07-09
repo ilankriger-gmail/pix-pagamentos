@@ -1,0 +1,9 @@
+# Nunca subir pra Vercel (dados privados / segredos / lixo)
+pagamentos/
+Novos comprovantes/
+.env.local
+.env
+.vercel
+.git
+node_modules
+.DS_Store

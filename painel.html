@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel de Pagamento</title>
+<style>
+  :root{
+    --bg:#0b0f0d; --surface:#121815; --surface2:#182420; --border:#243029;
+    --green:#22c55e; --green-dim:#0f2417; --green-border:#1f6b3a;
+    --blue:#9cc4f2; --blue-dim:#122436; --blue-border:#2b4a6b;
+    --yellow-border:#5c4c08; --red:#f87171;
+    --text:#e8f0ea; --muted:#8fa295; --muted2:#5f6f66;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  body{margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif}
+
+  /* ---- tela de PIN ---- */
+  .gate{position:fixed; inset:0; z-index:200; background:var(--bg);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px}
+  .gate.hide{display:none}
+  .gate h1{font-size:20px; margin:0 0 4px}
+  .gate p{font-size:13px; color:var(--muted); margin:0 0 22px; text-align:center}
+  .gate input{width:100%; max-width:240px; text-align:center; font-size:22px; letter-spacing:6px;
+    padding:13px; border-radius:12px; border:1px solid var(--border); background:var(--surface);
+    color:var(--text); font-weight:700}
+  .gate button{width:100%; max-width:240px; margin-top:12px; font-size:15px; font-weight:700;
+    padding:13px; border-radius:12px; border:none; background:var(--green); color:#04120a; cursor:pointer}
+  .gate .err{color:var(--red); font-size:13px; margin-top:12px; min-height:18px}
+
+  header{position:sticky; top:0; z-index:20; background:rgba(11,15,13,.97);
+    backdrop-filter:blur(10px); border-bottom:1px solid var(--border);
+    padding:calc(9px + env(safe-area-inset-top)) 0 0}
+  .hrow{display:flex; align-items:baseline; justify-content:space-between; gap:8px; padding:0 14px 7px}
+  .htitle{font-size:15px; font-weight:800}
+  .hstat{font-size:12px; color:var(--muted)} .hstat b{color:var(--text)}
+  .dot{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--muted2);
+    margin-left:6px; vertical-align:middle}
+  .dot.ok{background:var(--green)} .dot.bad{background:var(--red)}
+  .prog{height:4px; background:var(--surface2); margin:0 14px; border-radius:4px; overflow:hidden}
+  .prog > div{height:100%; background:var(--green); width:0%; transition:width .2s}
+  .tabs{display:flex; gap:6px; overflow-x:auto; padding:8px 12px; scrollbar-width:none;
+    -webkit-overflow-scrolling:touch}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto; white-space:nowrap; font-size:12.5px; font-weight:600; color:var(--muted);
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:7px 11px; cursor:pointer}
+  .tab b{color:var(--text); margin-right:3px}
+  .tab.on{background:var(--green-dim); border-color:var(--green-border); color:var(--text)}
+  .tab .tb{font-size:10.5px; color:var(--muted2); margin-left:5px}
+  .tab.on .tb, .tab .tb.full{color:var(--green)}
+
+  .panel{padding:14px 16px 44px}
+  .vhead{display:flex; align-items:center; justify-content:space-between; gap:10px; margin:2px 0 10px}
+  .vhead .t{font-size:15px; font-weight:700}
+  .vhead .reel{font-size:12px; color:var(--green); text-decoration:none;
+    background:var(--green-dim); border:1px solid var(--green-border);
+    padding:6px 10px; border-radius:9px; font-weight:600; white-space:nowrap}
+
+  .msgbox{background:var(--blue-dim); border:1px solid var(--blue-border); border-radius:13px;
+    padding:11px 13px; margin-bottom:16px}
+  .msglabel{font-size:11.5px; font-weight:700; color:var(--blue); margin-bottom:6px;
+    text-transform:uppercase; letter-spacing:.03em}
+  .msgtext{font-size:13px; line-height:1.5; color:#e2ecf5}
+  .msgbox .copy{margin-top:10px; width:100%; background:var(--blue); color:#04121f; border:none}
+
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:12px 13px; margin-bottom:10px}
+  .card.res{background:#14140a; border-color:var(--yellow-border)}
+  .card.sent{border-color:var(--blue-border)}
+  .card.done{opacity:.6}
+  .top{display:flex; gap:10px; align-items:baseline}
+  .rank{font-size:12px; color:var(--muted2); font-weight:700; min-width:14px}
+  .user{flex:1; min-width:0}
+  .user a{font-size:15px; font-weight:700; color:var(--blue); text-decoration:none; word-break:break-word}
+  .meta{font-size:11.5px; color:var(--muted); margin-top:1px}
+  .val{font-size:13px; font-weight:800; color:var(--green); white-space:nowrap}
+  .text{font-size:12.5px; color:#b9c6bf; line-height:1.4; margin:7px 0 0; word-break:break-word}
+  .dmrow{display:flex; gap:8px; align-items:center; margin-top:10px}
+  .copy{flex:1; text-align:center; font-size:12px; font-weight:700; padding:9px 12px; border-radius:9px;
+    border:1px solid var(--border); background:var(--surface2); color:var(--text); cursor:pointer}
+  .acts{display:flex; gap:8px; margin-top:8px}
+  .tog{flex:1; text-align:center; font-size:13px; font-weight:700; padding:11px 6px;
+    border-radius:11px; border:1px solid var(--border); background:var(--surface2);
+    color:var(--muted); cursor:pointer}
+  .tog.e.on{background:var(--blue-dim); border-color:var(--blue-border); color:var(--blue)}
+  .tog.p.on{background:var(--green); border-color:var(--green); color:#04120a}
+  .tog.busy{opacity:.5; pointer-events:none}
+  .resToggle{font-size:12.5px; color:var(--muted); cursor:pointer; padding:10px 2px; user-select:none}
+  .resWrap{display:none} .resWrap.open{display:block}
+  .toast{position:fixed; left:50%; bottom:30px; transform:translateX(-50%);
+    background:var(--green); color:#04120a; font-weight:700; padding:10px 18px;
+    border-radius:12px; z-index:99; font-size:14px; opacity:0; transition:opacity .15s}
+  .toast.show{opacity:1}
+  .toast.bad{background:var(--red); color:#1a0505}
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <h1>💸 Painel de Pagamento</h1>
+  <p>Digite o PIN pra acessar.</p>
+  <input id="pinInput" type="tel" inputmode="numeric" autocomplete="off" placeholder="••••••" maxlength="12">
+  <button onclick="unlock()">Entrar</button>
+  <div class="err" id="pinErr"></div>
+</div>
+
+<header style="display:none" id="hdr">
+  <div class="hrow">
+    <span class="htitle">💸 Pagamentos</span>
+    <span class="hstat">📤 <b id="sEnv">0</b> · ✅ <b id="sPago">0/0</b> · <b id="sVal">R$0</b><span class="dot" id="netdot" title="conexão"></span></span>
+  </div>
+  <div class="prog"><div id="progbar"></div></div>
+  <div class="tabs" id="tabs"></div>
+</header>
+
+<main id="app"></main>
+<div class="toast" id="toast"></div>
+
+<script>
+const LS_PIN = 'pix_painel_pin';
+let PIN = '';
+let D = null;             // dados (videos/winners/reservas/msg)
+let STATE = {};           // { pk: {e,p} }
+let ALLPKS = new Set();
+let pkRes = {};
+
+const esc = s => (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const get = pk => STATE[pk] || {};
+
+async function api(payload){
+  const r = await fetch('/api/painel', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(Object.assign({pin:PIN}, payload))
+  });
+  if(r.status === 401){ const e = new Error('pin'); e.code = 401; throw e; }
+  if(!r.ok){ const e = new Error('http'); e.code = r.status; throw e; }
+  return r.json();
+}
+
+// ---- desbloqueio ----
+async function unlock(){
+  const val = (document.getElementById('pinInput').value || '').trim();
+  const errEl = document.getElementById('pinErr');
+  if(!val){ errEl.textContent = 'Digite o PIN.'; return; }
+  errEl.textContent = 'Verificando...';
+  PIN = val;
+  try {
+    const resp = await api({action:'load'});
+    D = resp.data; STATE = resp.state || {};
+    if(!D){ errEl.textContent = 'Dados não carregados. Avise o responsável.'; return; }
+    try { localStorage.setItem(LS_PIN, PIN); } catch(e){}
+    indexData();
+    document.getElementById('gate').classList.add('hide');
+    document.getElementById('hdr').style.display = '';
+    build();
+    let start = parseInt(localStorage.getItem('pix_painel_tab')||'0',10);
+    if(isNaN(start)||start<0||start>=D.videos.length) start=0;
+    setTab(start);
+    updateBar(); updateBadges(); setDot(true);
+    startPolling();
+  } catch(e){
+    if(e.code === 401){ errEl.textContent = 'PIN incorreto.'; PIN=''; }
+    else { errEl.textContent = 'Erro de conexão. Tente de novo.'; }
+  }
+}
+
+function indexData(){
+  ALLPKS = new Set(); pkRes = {};
+  D.videos.forEach(v => {
+    v.winners.forEach(w => { ALLPKS.add(w.pk); pkRes[w.pk]=false; });
+    v.reservas.forEach(w => { ALLPKS.add(w.pk); pkRes[w.pk]=true; });
+  });
+}
+
+// ---- render (igual ao tracker, mas estado vem do servidor) ----
+function card(w, rank, isRes, vi){
+  const s = get(w.pk);
+  const cls = 'card'+(isRes?' res':'')+(s.p?' done':(s.e?' sent':''));
+  return `<div class="${cls}" id="c_${w.pk}">
+    <div class="top">
+      ${rank?`<div class="rank">${rank}</div>`:''}
+      <div class="user">
+        <a href="${esc(w.profile)}" target="_blank" rel="noopener">@${esc(w.user)}</a>
+        <div class="meta">♥ ${w.likes}${isRes?' · reserva':''}</div>
+      </div>
+      <div class="val">R$${D.valor}</div>
+    </div>
+    <div class="text">"${esc(w.text)||'—'}"</div>
+    <div class="dmrow">
+      <button class="copy" onclick="copyMsg(${vi})">📋 Copiar msg</button>
+      <a class="copy" href="${esc(w.profile)}" target="_blank" rel="noopener" style="text-decoration:none">👤 Abrir DM</a>
+    </div>
+    <div class="acts">
+      <div class="tog e ${s.e?'on':''}" onclick="tog('${w.pk}','e')">${s.e?'📤 Enviada ✓':'📤 Enviar msg'}</div>
+      <div class="tog p ${s.p?'on':''}" onclick="tog('${w.pk}','p')">${s.p?'✅ Pago':'Marcar pago'}</div>
+    </div>
+  </div>`;
+}
+
+function build(){
+  let tabs = '', panels = '';
+  D.videos.forEach((v,i) => {
+    const short = esc(v.label.split(' · ')[0]);
+    tabs += `<button class="tab" id="tab_${i}" onclick="setTab(${i})"><b>V${v.num}</b>${short} <span class="tb" id="tb_${i}"></span></button>`;
+    let cards = '';
+    v.winners.forEach((w,j) => cards += card(w, j+1, false, i));
+    let res = '';
+    if(v.reservas.length){
+      res = `<div class="resToggle" onclick="toggleRes(this)">▸ Reservas (${v.reservas.length})</div><div class="resWrap">`;
+      v.reservas.forEach((w,j) => res += card(w, 'R'+(j+1), true, i));
+      res += `</div>`;
+    }
+    panels += `<section class="panel" id="p_${i}" style="display:none">
+      <div class="vhead"><span class="t">🎥 V${v.num} — ${esc(v.label)}</span>
+        <a class="reel" href="${esc(v.url)}" target="_blank" rel="noopener">▶ reel</a></div>
+      <div class="msgbox">
+        <div class="msglabel">💬 Mensagem deste vídeo</div>
+        <div class="msgtext" id="msg_${i}">${esc(v.msg)}</div>
+        <button class="copy" onclick="copyMsg(${i})">📋 Copiar mensagem</button>
+      </div>
+      ${cards}${res}</section>`;
+  });
+  document.getElementById('tabs').innerHTML = tabs;
+  document.getElementById('app').innerHTML = panels;
+}
+
+function toggleRes(el){
+  const w = el.nextElementSibling;
+  const open = w.classList.toggle('open');
+  el.textContent = open ? '▾ Reservas' : '▸ Reservas ('+w.children.length+')';
+}
+
+function setTab(i){
+  D.videos.forEach((v,k) => {
+    document.getElementById('p_'+k).style.display = (k===i ? 'block' : 'none');
+    document.getElementById('tab_'+k).classList.toggle('on', k===i);
+  });
+  try { localStorage.setItem('pix_painel_tab', i); } catch(e){}
+  const t = document.getElementById('tab_'+i);
+  if(t && t.scrollIntoView) t.scrollIntoView({inline:'center', block:'nearest'});
+  window.scrollTo(0,0);
+}
+
+function paintCard(pk){
+  const el = document.getElementById('c_'+pk); if(!el) return;
+  const s = get(pk), isRes = pkRes[pk];
+  el.className = 'card'+(isRes?' res':'')+(s.p?' done':(s.e?' sent':''));
+  const be = el.querySelector('.tog.e'), bp = el.querySelector('.tog.p');
+  be.classList.toggle('on', !!s.e); be.textContent = s.e?'📤 Enviada ✓':'📤 Enviar msg';
+  bp.classList.toggle('on', !!s.p); bp.textContent = s.p?'✅ Pago':'Marcar pago';
+}
+
+async function tog(pk, field){
+  const el = document.getElementById('c_'+pk);
+  const btn = el && el.querySelector('.tog.'+field);
+  const cur = get(pk);
+  const newVal = !cur[field];
+  if(btn) btn.classList.add('busy');
+  try {
+    const resp = await api({action:'set', pk, field, value:newVal});
+    STATE = resp.state || {};
+    // repinta este e recalcula (o 'p' pode ter mexido no 'e' e vice-versa)
+    paintCard(pk); updateBar(); updateBadges(); setDot(true);
+  } catch(e){
+    setDot(false);
+    toast(e.code===401 ? 'Sessão expirou — recarregue' : 'Falha ao salvar', true);
+  } finally {
+    if(btn) btn.classList.remove('busy');
+  }
+}
+
+function copyMsg(vi){
+  const txt = D.videos[vi] ? D.videos[vi].msg : '';
+  const ok = () => toast('Mensagem copiada ✓');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(ok).catch(()=>fallbackCopy(txt,ok));
+  } else fallbackCopy(txt, ok);
+}
+function fallbackCopy(txt, ok){
+  const ta = document.createElement('textarea');
+  ta.value = txt; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  let done=false; try { done = document.execCommand('copy'); } catch(e){}
+  document.body.removeChild(ta);
+  done ? ok() : toast('Não consegui copiar', true);
+}
+
+function updateBar(){
+  let env=0, pago=0; const T=D.totalWinners;
+  D.videos.forEach(v => v.winners.forEach(w => {
+    const s = get(w.pk); if(s.e||s.p) env++; if(s.p) pago++;
+  }));
+  document.getElementById('sEnv').textContent = env;
+  document.getElementById('sPago').textContent = pago+'/'+T;
+  document.getElementById('sVal').textContent = 'R$'+(pago*D.valor);
+  document.getElementById('progbar').style.width = (T?Math.round(pago/T*100):0)+'%';
+}
+function updateBadges(){
+  D.videos.forEach((v,i) => {
+    const pago = v.winners.filter(w => get(w.pk).p).length;
+    const el = document.getElementById('tb_'+i); if(!el) return;
+    el.textContent = pago+'/'+v.winners.length;
+    el.classList.toggle('full', pago===v.winners.length && pago>0);
+  });
+}
+
+function setDot(ok){
+  const d = document.getElementById('netdot');
+  d.className = 'dot ' + (ok ? 'ok' : 'bad');
+}
+
+// ---- polling: pega mudanças feitas em outros aparelhos ----
+let pollT = null, pollBusy = false;
+async function pollOnce(){
+  if(pollBusy || document.hidden) return;
+  pollBusy = true;
+  try {
+    const resp = await api({action:'poll'});
+    const next = resp.state || {};
+    if(JSON.stringify(next) !== JSON.stringify(STATE)){
+      STATE = next;
+      ALLPKS.forEach(paintCard);
+      updateBar(); updateBadges();
+    }
+    setDot(true);
+  } catch(e){ setDot(false); }
+  finally { pollBusy = false; }
+}
+function startPolling(){
+  if(pollT) clearInterval(pollT);
+  pollT = setInterval(pollOnce, 15000);
+  document.addEventListener('visibilitychange', () => { if(!document.hidden) pollOnce(); });
+}
+
+let toastT;
+function toast(m, bad){
+  const el=document.getElementById('toast');
+  el.textContent=m; el.className='toast show'+(bad?' bad':'');
+  clearTimeout(toastT); toastT=setTimeout(()=>el.className='toast'+(bad?' bad':''),1600);
+}
+
+// Enter no campo de PIN + tenta o PIN salvo
+document.getElementById('pinInput').addEventListener('keydown', e => { if(e.key==='Enter') unlock(); });
+(function(){
+  let saved=''; try { saved = localStorage.getItem(LS_PIN)||''; } catch(e){}
+  if(saved){ document.getElementById('pinInput').value = saved; unlock(); }
+  else document.getElementById('pinInput').focus();
+})();
+</script>
+</body>
+</html>

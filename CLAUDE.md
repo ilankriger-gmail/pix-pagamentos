@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Static site showing verified PIX payment proofs for @NextlevelDJ campaigns. Single-page HTML, no framework, no build step. Deployed on Vercel.
 
+## Local preview
+
+No build or install step — just open `index.html`. To exercise relative paths (the `comprovantes/` images, the modal), serve it: `python3 -m http.server 8000` from the project root, then visit `http://localhost:8000`. Always eyeball changes locally before deploying.
+
 ## Deployment
 
 ```bash

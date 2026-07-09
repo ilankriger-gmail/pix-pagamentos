@@ -1,1 +1,10 @@
 .vercel
+node_modules
+.DS_Store
+.env.local
+
+# Ferramenta interna de pagamentos (dados privados, nao deployar)
+pagamentos/
+
+# Staging de prints crus (backup local, nao versionar)
+Novos comprovantes/
