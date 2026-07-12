@@ -42,21 +42,59 @@
 
     /* ── CTA BANNER ── */
     .cta-banner {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
       text-align: center;
-      background: var(--green-dim);
-      border-bottom: 1px solid var(--green-border);
-      color: var(--green);
-      font-size: 14px;
-      font-weight: 600;
-      padding: 12px 24px;
+      background: linear-gradient(90deg, #00c97a, #00e08a);
+      color: #001b10;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14.5px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      padding: 13px 24px;
       text-decoration: none;
-      letter-spacing: 0;
-      transition: background 0.2s;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 20px rgba(0, 201, 122, 0.4);
+      transition: filter 0.2s ease;
     }
-
-    .cta-banner:hover {
-      background: rgba(0, 201, 122, 0.18);
+    /* brilho que passa pra chamar atenção mesmo sem rolar a página */
+    .cta-banner::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -60%;
+      width: 45%;
+      height: 100%;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,0.5), transparent);
+      transform: skewX(-20deg);
+      animation: ctaShine 3.6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .cta-banner:hover { filter: brightness(1.06); }
+    .cta-banner-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #001b10;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 900;
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+    .cta-banner:hover .cta-banner-arrow { transform: translateX(3px); }
+    @keyframes ctaShine {
+      0% { left: -60%; }
+      55%, 100% { left: 130%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cta-banner::after { animation: none; display: none; }
     }
 
     /* ── HERO ── */
@@ -639,7 +677,8 @@
 
   <!-- CTA BANNER -->
   <a href="https://linkdobem.org/?utm_campaign=teamo_MAIS&utm_source=IG_teamo_MAIS&utm_term=teamo_MAIS" target="_blank" class="cta-banner">
-    Quer receber uma doação? Conheça as ações do meu Link do Bem →
+    🎁 Você pode ser o próximo! Participe das ações do meu Link do Bem
+    <span class="cta-banner-arrow" aria-hidden="true">→</span>
   </a>
 
   <!-- HERO -->
