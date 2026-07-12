@@ -530,6 +530,99 @@
     .modal-close:hover { background: rgba(255,255,255,0.2); }
 
     /* ── RESPONSIVE ── */
+    /* ── LINK DO BEM — CAMPANHAS ATIVAS ── */
+    .ldb {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px 90px;
+    }
+    .ldb-head { margin-bottom: 22px; }
+    .ldb-kicker {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+    .ldb-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin: 8px 0 6px;
+    }
+    .ldb-sub {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--muted);
+      max-width: 540px;
+    }
+    .ldb-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+    .ldb-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      text-decoration: none;
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+    .ldb-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--green-border);
+      box-shadow: 0 18px 40px -24px rgba(0, 201, 122, 0.5);
+    }
+    .ldb-art {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      background: var(--surface2);
+      overflow: hidden;
+    }
+    .ldb-art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s;
+    }
+    .ldb-card:hover .ldb-art img { transform: scale(1.05); }
+    .ldb-body {
+      padding: 12px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+    .ldb-name {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--text);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .ldb-go {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: auto;
+    }
+
+    @media (max-width: 900px) {
+      .ldb-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
     @media (max-width: 600px) {
       .hero { padding: 60px 20px 40px; }
       .stats { flex-direction: column; }
@@ -538,6 +631,7 @@
       .campaign-head { padding: 18px 20px; }
       .winners { grid-template-columns: 1fr 1fr; }
       .tab-btn { padding: 9px 18px; font-size: 12px; }
+      .ldb-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -1731,6 +1825,16 @@
 
   </div>
 
+  <!-- LINK DO BEM — CAMPANHAS ATIVAS (puxadas ao vivo da API do WP) -->
+  <section class="ldb" id="ldb" hidden aria-label="Campanhas ativas do Link do Bem">
+    <div class="ldb-head">
+      <div class="ldb-kicker">Participe você também</div>
+      <div class="ldb-title">Campanhas ativas do Link do Bem</div>
+      <p class="ldb-sub">As mesmas ações que pagam esses PIX estão abertas agora. Toque numa campanha pra participar — leva menos de um minuto.</p>
+    </div>
+    <div class="ldb-grid" id="ldbGrid"></div>
+  </section>
+
   <!-- FOOTER -->
   <footer>
     <p>Feito por <a href="https://instagram.com/nextleveldj" target="_blank">@NextlevelDJ</a></p>
@@ -1778,6 +1882,66 @@
     modalClose.addEventListener('click', () => modal.classList.remove('active'));
     modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('active'); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.classList.remove('active'); });
+
+    // Link do Bem — campanhas ativas (mesma fonte do "O Moço 2.0": categoria WP 192).
+    // Fetch ao vivo do navegador; UTMs de atribuição obrigatórios; falha-aberto (some sozinha).
+    (function () {
+      const UTM = 'utm_campaign=teamo_MAIS&utm_source=IG_teamo_MAIS&utm_term=teamo_MAIS';
+      const withUtm = u => u ? u + (u.includes('?') ? '&' : '?') + UTM : 'https://linkdobem.org/?' + UTM;
+      const API = 'https://linkdobem.org/wp-json/wp/v2/posts?categories=192&per_page=10&_embed=wp:featuredmedia';
+      const decode = s => { const t = document.createElement('textarea'); t.innerHTML = s || ''; return t.value.replace(/<[^>]+>/g, '').trim(); };
+      const pickArt = m => {
+        if (!m) return null;
+        const sz = (m.media_details && m.media_details.sizes) || {};
+        return (sz.large && sz.large.source_url) || (sz.medium_large && sz.medium_large.source_url) ||
+               m.source_url || (sz.medium && sz.medium.source_url) || null;
+      };
+      fetch(API, { headers: { 'Accept': 'application/json' } })
+        .then(r => r.ok ? r.json() : [])
+        .then(posts => {
+          if (!Array.isArray(posts) || !posts.length) return;
+          const grid = document.getElementById('ldbGrid');
+          const frag = document.createDocumentFragment();
+          posts.forEach(p => {
+            const titulo = decode(p.title && p.title.rendered);
+            if (!titulo) return;
+            const media = p._embedded && p._embedded['wp:featuredmedia'] && p._embedded['wp:featuredmedia'][0];
+            const art = pickArt(media);
+            const a = document.createElement('a');
+            a.className = 'ldb-card';
+            a.href = withUtm(p.link || 'https://linkdobem.org/');
+            a.target = '_blank';
+            a.rel = 'sponsored noopener noreferrer';
+            const artEl = document.createElement('div');
+            artEl.className = 'ldb-art';
+            if (art) {
+              const img = document.createElement('img');
+              img.loading = 'lazy';
+              img.alt = '';
+              img.src = art;
+              artEl.appendChild(img);
+            }
+            const body = document.createElement('div');
+            body.className = 'ldb-body';
+            const name = document.createElement('div');
+            name.className = 'ldb-name';
+            name.textContent = titulo;
+            const go = document.createElement('span');
+            go.className = 'ldb-go';
+            go.innerHTML = 'Participar <span aria-hidden="true">↗</span>';
+            body.appendChild(name);
+            body.appendChild(go);
+            a.appendChild(artEl);
+            a.appendChild(body);
+            frag.appendChild(a);
+          });
+          if (frag.childNodes.length) {
+            grid.appendChild(frag);
+            document.getElementById('ldb').hidden = false;
+          }
+        })
+        .catch(() => {});
+    })();
   </script>
 
 </body>
